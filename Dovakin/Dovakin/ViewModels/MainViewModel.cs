@@ -1,70 +1,60 @@
-﻿using ReactiveUI;
+﻿using Dovakin.Model;
+using ReactiveUI;
 using System.Reactive;
 
 namespace Dovakin.ViewModels;
 
 public class MainViewModel : ViewModelBase // три приватных свойства  с текущим и макс здор 
 {
-    #region Имя
+    #region Модели
 
     /// <summary>
-    /// Имя героя
+    /// Модель игрока
     /// </summary>
-    private string _name;
+    private Player _player;
+
+    #endregion
+
+    #region Имя
 
     public string Name
     {
-        get => _name;
+        get => _player.Name;
 
-        set => this.RaiseAndSetIfChanged(ref _name, value);
+        set => this.RaiseAndSetIfChanged(ref _player.Name, value);
     }
 
     #endregion
 
     #region Максимальное здоровье
 
-    /// <summary>
-    /// Мах здоровье
-    /// </summary>
-    private int _maxHealth;
-
     public int MaxHealth
     {
-        get => _maxHealth;
+        get => _player.MaxHealth;
 
-        set => this.RaiseAndSetIfChanged(ref _maxHealth, value);
+        set => this.RaiseAndSetIfChanged(ref _player.MaxHealth, value);
     }
 
     #endregion
 
     #region Текущее здоровье
 
-    /// <summary>
-    /// Текущее здоровье
-    /// </summary>
-    private int _currentHealth;
-
     public int CurrentHealth
     {
-        get => _currentHealth;
+        get => _player.CurrentHealth;
 
-        set => this.RaiseAndSetIfChanged(ref _currentHealth, value);
+        set => this.RaiseAndSetIfChanged(ref _player.CurrentHealth, value);
     }
 
     #endregion
 
     #region Жив персонаж или мертв
 
-    /// <summary>
-    /// Жив ли
-    /// </summary>
-    private bool _isAlive;
-
     public bool IsAlive
     {
-        get => _isAlive;
+        get => _player.IsAlive;
 
-        set => this.RaiseAndSetIfChanged(ref _isAlive, value);
+        set => this.RaiseAndSetIfChanged(ref _player.IsAlive, value);
     }
 
     #endregion
@@ -86,10 +76,7 @@ public class MainViewModel : ViewModelBase // три приватных свой
 
     public MainViewModel()
     {
-        Name = "Dovakin";
-        MaxHealth = 100;
-        CurrentHealth = MaxHealth;
-        IsAlive = true;
+        _player = new Player("Довакин", 100);
 
         #region Связывание команд и методов
 
