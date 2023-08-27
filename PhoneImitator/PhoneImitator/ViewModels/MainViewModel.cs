@@ -77,6 +77,7 @@ public class MainViewModel : ViewModelBase
 
         #endregion
 
+        Number = string.Empty;
         _isCallInProgress = false; // Когда телефон только создался - он не звонит
     }
 

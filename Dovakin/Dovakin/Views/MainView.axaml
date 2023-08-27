@@ -1,0 +1,143 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="clr-namespace:Dovakin.ViewModels"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="Dovakin.Views.MainView"
+             x:DataType="vm:MainViewModel">
+  <Design.DataContext>
+    <!-- This only sets the DataContext for the previewer in an IDE,
+         to set the actual DataContext for runtime, set the DataContext property in code (look at App.axaml.cs) -->
+    <vm:MainViewModel />
+  </Design.DataContext>
+
+	<Grid>
+		<Grid.ColumnDefinitions>
+			<ColumnDefinition Width="*" />
+			<ColumnDefinition Width="*" />
+		</Grid.ColumnDefinitions>
+
+		<Grid.RowDefinitions>
+			<RowDefinition Height="auto" />
+			<RowDefinition Height="auto" />
+			<RowDefinition Height="auto" />
+			<RowDefinition Height="auto" />
+		</Grid.RowDefinitions>
+
+		<Border
+			BorderBrush="Black"
+			BorderThickness="1"
+			Margin="10"
+			CornerRadius="10"
+			Grid.Column="0"
+			Grid.Row="0">
+			
+			<StackPanel
+				Margin="10 0 10 0"
+				Orientation="Horizontal">
+
+				<Label>
+					Имя:
+				</Label>
+
+				<Label
+					Content="{ Binding Name }">
+				</Label>
+				
+			</StackPanel>
+			
+		</Border>
+
+
+		<Border
+			BorderBrush="Black"
+			BorderThickness="1"
+			Margin="10"
+			CornerRadius="10"
+			Grid.Column="1"
+			Grid.Row="0">
+			
+			<StackPanel
+				Margin="10 0 10 0"
+				Orientation="Horizontal">
+
+				<Label>
+					Максимальное здоровье:
+				</Label>
+
+				<Label
+					Content="{ Binding MaxHealth }">
+				</Label>
+			</StackPanel>
+			
+		</Border>
+
+		<Border
+			BorderBrush="Black"
+			BorderThickness="1"
+			Margin="10"
+			CornerRadius="10"
+			Grid.Column="0"
+			Grid.Row="1">
+
+			<StackPanel
+				Margin="10 0 10 0"
+				Orientation="Horizontal">
+
+				<Label>
+					Жив ли герой:
+				</Label>
+
+				<Label
+					Content="{ Binding IsAlive }">
+				</Label>
+			</StackPanel>
+
+		</Border>
+
+		<Border
+			BorderBrush="Black"
+			BorderThickness="1"
+			Margin="10"
+			CornerRadius="10"
+			Grid.Column="1"
+			Grid.Row="1">
+
+			<StackPanel
+				Margin="10 0 10 0"
+				Orientation="Horizontal">
+
+				<Label>
+					Текущее здоровье:
+				</Label>
+
+				<Label
+					Content="{ Binding CurrentHealth }">
+				</Label>
+			</StackPanel>
+
+		</Border>
+
+		<!-- -1 HP -->
+		<Button
+			Grid.Column="0"
+			Grid.Row="2"
+			Margin="10 10 10 10"
+			HorizontalAlignment="Center"
+			Command="{ Binding DoDamageCommand }">
+			Нанести урон
+		</Button>
+
+		<!-- +1 HP -->
+		<Button
+			Grid.Column="1"
+			Grid.Row="2"
+			HorizontalAlignment="Center"
+			Command="{ Binding HealCommand }">
+			Вылечить
+		</Button>
+		
+	</Grid>
+	
+</UserControl>
