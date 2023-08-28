@@ -1,0 +1,162 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="clr-namespace:Plant.ViewModels"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="Plant.Views.MainView"
+             x:DataType="vm:MainViewModel">
+  <Design.DataContext>
+    <!-- This only sets the DataContext for the previewer in an IDE,
+         to set the actual DataContext for runtime, set the DataContext property in code (look at App.axaml.cs) -->
+    <vm:MainViewModel />
+  </Design.DataContext>
+
+
+	<Grid>
+		<Grid.ColumnDefinitions>
+			<ColumnDefinition Width="*" />
+		</Grid.ColumnDefinitions>
+
+		<Grid.RowDefinitions>
+			<RowDefinition Height="auto" />
+			<RowDefinition Height="auto" />
+			<RowDefinition Height="auto" />
+			<RowDefinition Height="auto" />
+			<RowDefinition Height="auto" />
+			<RowDefinition Height="auto" />
+		</Grid.RowDefinitions>
+
+		<Border
+			BorderBrush="Green"
+			BorderThickness="1"
+			Margin="10"
+			CornerRadius="10"
+			Grid.Column="0"
+			Grid.Row="1">
+
+			<StackPanel
+				Margin="10 0 10 0"
+				Orientation="Horizontal">
+
+				<Label>
+					Семейство:
+				</Label>
+
+				<Label
+					Content="{ Binding Family }">
+				</Label>
+
+			</StackPanel>
+
+		</Border>
+
+		<Border
+			BorderBrush="Green"
+			BorderThickness="1"
+			Margin="10"
+			CornerRadius="10"
+			Grid.Column="0"
+			Grid.Row="0">
+
+			<StackPanel
+				Margin="10 0 10 0"
+				Orientation="Horizontal">
+
+				<Label>
+					Название растения:
+				</Label>
+
+				<Label
+					Content="{ Binding Title }">
+				</Label>
+
+			</StackPanel>
+
+		</Border>
+
+		<Border
+			BorderBrush="Green"
+			BorderThickness="1"
+			Margin="10"
+			CornerRadius="10"
+			Grid.Column="0"
+			Grid.Row="2">
+
+			<StackPanel
+				Margin="10 0 10 0"
+				Orientation="Horizontal">
+
+				<Label>
+					Пороговая высота растения(м):
+				</Label>
+
+				<Label
+					Content="{ Binding HeightThreshold }">
+				</Label>
+
+			</StackPanel>
+
+		</Border>
+		
+
+		<Border
+			BorderBrush="Green"
+			BorderThickness="1"
+			Margin="10"
+			CornerRadius="10"
+			Grid.Column="0"
+			Grid.Row="3">
+
+			<StackPanel
+				Margin="10 0 10 0"
+				Orientation="Horizontal">
+
+				<Label>
+					Цветет ли растение:
+				</Label>
+
+				<Label
+					Content="{ Binding DoesThePlantBloom }">
+				</Label>
+
+			</StackPanel>
+
+		</Border>
+
+		<Border
+			BorderBrush="Green"
+			BorderThickness="1"
+			Margin="10"
+			CornerRadius="10"
+			Grid.Column="0"
+			Grid.Row="4">
+
+			<StackPanel
+				Margin="10 0 10 0"
+				Orientation="Horizontal">
+
+				<Label>
+					Текущая высота растения(м):
+				</Label>
+
+				<Label
+					Content="{ Binding CurrentHeight }">
+				</Label>
+
+			</StackPanel>
+
+		</Border>
+
+		<Button
+			Grid.Column="0"
+			Grid.Row="5"
+			Margin="10 10 10 10"
+			HorizontalAlignment="Center"
+			Command="{ Binding GrowthCommand }">
+			Поливать растение
+		</Button>
+		
+	</Grid>
+	
+	</UserControl>
