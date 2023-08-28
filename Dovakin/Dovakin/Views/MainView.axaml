@@ -112,9 +112,17 @@
 					Текущее здоровье:
 				</Label>
 
-				<Label
+				<ProgressBar
+					Minimum="0"
+					Maximum="100"
+					Value="{ Binding CurrentHealth }"
+					ShowProgressText="True">
+				</ProgressBar>
+				
+				<!-- <Label
 					Content="{ Binding CurrentHealth }">
-				</Label>
+				</Label> -->
+				
 			</StackPanel>
 
 		</Border>
