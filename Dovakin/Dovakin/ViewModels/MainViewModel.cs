@@ -76,7 +76,7 @@ public class MainViewModel : ViewModelBase // три приватных свой
 
     public MainViewModel()
     {
-        _player = new Player("Довакин", 100);
+        _player = new Player("Довакин", 200);
 
         #region Связывание команд и методов
 

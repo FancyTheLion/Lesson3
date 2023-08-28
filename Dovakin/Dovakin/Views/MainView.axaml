@@ -114,14 +114,14 @@
 
 				<ProgressBar
 					Minimum="0"
-					Maximum="100"
+					Maximum="{ Binding MaxHealth }"
 					Value="{ Binding CurrentHealth }"
-					ShowProgressText="True">
+					ShowProgressText="False">
 				</ProgressBar>
-				
-				<!-- <Label
+
+				<Label
 					Content="{ Binding CurrentHealth }">
-				</Label> -->
+				</Label>
 				
 			</StackPanel>
 
