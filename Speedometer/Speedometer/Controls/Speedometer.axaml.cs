@@ -10,7 +10,10 @@ namespace Speedometer.Controls
     {
         #region Константы
 
-        private const double Radius = 200;
+        /// <summary>
+        /// Радиус спидометра: половина минимальной из сторон умноженная на данную константу.
+        /// </summary>
+        private const double SpeedometerRadiusFactor = 0.9;
 
         #endregion
 
@@ -78,24 +81,34 @@ namespace Speedometer.Controls
 
         #endregion
 
-        #region Размер "холста"
+        #region Координаты особых точек
 
         /// <summary>
         /// Ширина контрола
         /// </summary>
-        private int _width;
+        private double _width;
 
         /// <summary>
         /// Высота контрола
         /// </summary>
-        private int _height;
-
-        #endregion
+        private double _height;
 
         /// <summary>
         /// Точка - центр окружности
         /// </summary>
-        private Point _circleCenter = new Point(200, 200);
+        private Point _circleCenter = new Point(0, 0);
+
+        /// <summary>
+        /// Меньшая из двух сторон (ширины\высоты)
+        /// </summary>
+        private double _minSide;
+
+        /// <summary>
+        /// Радиус самого спидометра(внешнего круга)
+        /// </summary>
+        private double _speedometerRadius;
+
+        #endregion
 
         /// <summary>
         /// Конструктор
@@ -129,8 +142,8 @@ namespace Speedometer.Controls
                 new SolidColorBrush(Colors.Transparent),
                 new Pen(new SolidColorBrush(Colors.Black)),
                 _circleCenter,
-                Radius,
-                Radius
+                _speedometerRadius,
+                _speedometerRadius
             );
 
         }
@@ -153,8 +166,14 @@ namespace Speedometer.Controls
         /// </summary>
         private void OnResize(Rect bounds)
         {
-            _width = (int)bounds.Width;
-            _height = (int)bounds.Height;
+            _width = bounds.Width;
+            _height = bounds.Height;
+
+            _circleCenter = new Point(_width / 2.0, _height / 2.0);
+
+            _minSide = Math.Min(_width, _height);
+
+            _speedometerRadius = SpeedometerRadiusFactor * _minSide / 2.0;
         }
 
         #endregion
