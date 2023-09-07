@@ -152,14 +152,7 @@ namespace Speedometer.Controls
             );
 
             // Рисуем стрелку
-            DrowNotch
-            (
-                context,
-                100,
-                150,
-                Math.PI * 1.5,
-                HandPen
-            );
+            DrawHand(context);
 
 
         }
@@ -222,7 +215,12 @@ namespace Speedometer.Controls
 
         #endregion
 
-
+        /// <summary>
+        /// Метод, что рисует точку на некотором расстоянии от центра
+        /// </summary>
+        /// <param name="r">Расстояние от центра до точки</param>
+        /// <param name="angle">Угол между нулем и точкой</param>
+        /// <returns>Возвращение точки с координатами</returns>
         private Point GetPointCoodinatesByAngleAndRadius(double r, double angle)
         {
             double x = (-1 * r * Math.Sin(angle)) + _circleCenter.X;
@@ -231,7 +229,15 @@ namespace Speedometer.Controls
             return new Point(x, y);
         }
 
-        private void DrowNotch(DrawingContext context, double r1, double r2, double angle, Pen pen)
+        /// <summary>
+        /// Метод что рисует условную линию
+        /// </summary>
+        /// <param name="context">Где происходит рисование</param>
+        /// <param name="r1">Радис от центра до точки начала черточки</param>
+        /// <param name="r2">Радиус от центра до конца черточки</param>
+        /// <param name="angle">Угол между нулем и черточкой</param>
+        /// <param name="pen">Кисть, что рисет это все</param>
+        private void DrawNotch(DrawingContext context, double r1, double r2, double angle, Pen pen)
         {
             Point a = GetPointCoodinatesByAngleAndRadius(r1, angle);
             Point b = GetPointCoodinatesByAngleAndRadius(r2, angle);
@@ -239,7 +245,14 @@ namespace Speedometer.Controls
             context.DrawLine(pen, a, b);
         }
 
+        private void DrawHand(DrawingContext context)
+        {
+            double a = 2 * Math.PI / (MaxSpeed - MinSpeed);
+            double b = -1 * a * MinSpeed;
+            double q = a * CurrentSpeed + b;
 
+            DrawNotch(context, 0, 200, q, HandPen);
+        }
 
     }
 }

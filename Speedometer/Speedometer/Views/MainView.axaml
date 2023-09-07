@@ -31,7 +31,7 @@
 			Grid.Row="0"
 			MinSpeed="{ Binding MinSpeed }"
 			CurrentSpeed="{ Binding CurrentSpeed }"
-			MaxSpeed="{ Binding MaxTemperature }">
+			MaxSpeed="{ Binding MaxSpeed }">
 			
 		</controls:Speedometer>
 

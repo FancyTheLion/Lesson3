@@ -102,15 +102,6 @@ public class MainViewModel : ViewModelBase
             return;
         }
 
-        CurrentSpeed = CurrentSpeed + 10;
+        CurrentSpeed = CurrentSpeed - 10;
     }
-
-
-
-
-
-
-
-
-
 }
