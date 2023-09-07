@@ -15,6 +15,11 @@ namespace Speedometer.Controls
         /// </summary>
         private const double SpeedometerRadiusFactor = 0.9;
 
+        /// <summary>
+        /// Это Pen, что рисует стрелку спидометра
+        /// </summary>
+        private readonly Pen HandPen = new Pen(new SolidColorBrush(Colors.Red), 5);
+
         #endregion
 
         #region Биндинг свойств
@@ -146,6 +151,17 @@ namespace Speedometer.Controls
                 _speedometerRadius
             );
 
+            // Рисуем стрелку
+            DrowNotch
+            (
+                context,
+                100,
+                150,
+                Math.PI * 1.5,
+                HandPen
+            );
+
+
         }
 
         #region Обработчик изменения свойств контрола и размеров окна
@@ -205,5 +221,25 @@ namespace Speedometer.Controls
         }
 
         #endregion
+
+
+        private Point GetPointCoodinatesByAngleAndRadius(double r, double angle)
+        {
+            double x = (-1 * r * Math.Sin(angle)) + _circleCenter.X;
+            double y = (r * Math.Cos(angle)) + _circleCenter.Y;
+
+            return new Point(x, y);
+        }
+
+        private void DrowNotch(DrawingContext context, double r1, double r2, double angle, Pen pen)
+        {
+            Point a = GetPointCoodinatesByAngleAndRadius(r1, angle);
+            Point b = GetPointCoodinatesByAngleAndRadius(r2, angle);
+
+            context.DrawLine(pen, a, b);
+        }
+
+
+
     }
 }
