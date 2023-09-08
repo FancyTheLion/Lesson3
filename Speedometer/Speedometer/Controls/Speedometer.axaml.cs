@@ -18,7 +18,33 @@ namespace Speedometer.Controls
         /// <summary>
         /// Это Pen, что рисует стрелку спидометра
         /// </summary>
-        private readonly Pen HandPen = new Pen(new SolidColorBrush(Colors.Red), 5);
+        private readonly Pen HandPen = new Pen(new SolidColorBrush(Colors.Red), 6);
+
+        /// <summary>
+        /// Penдля рисованиячерточек
+        /// </summary>
+        private readonly Pen DashPen = new Pen(new SolidColorBrush(Colors.Black), 4);
+
+        /// <summary>
+        /// Множитель для вычисления длинны стрелки. Радиуc спидометра умножается на него и получается длина стрелки
+        /// </summary>
+        private const double HandLengthFactor = 0.95;
+
+        /// <summary>
+        /// Множитель для вычисления внутреннего радиуса засечек на шкале. Радиус спидометра умножается на это число и получается внутренний
+        /// радиус засечек
+        /// </summary>
+        private const double NotchInnerRadiusFactor = 0.7;
+
+        /// <summary>
+        /// Множитель для вычисления внешнего радиуса засечек на шкале
+        /// </summary>
+        private const double NotchOuterRadiusFactor = 0.9;
+
+        /// <summary>
+        /// Число чёрточек на спидометре
+        /// </summary>
+        private const int DashCount = 20;
 
         #endregion
 
@@ -113,6 +139,26 @@ namespace Speedometer.Controls
         /// </summary>
         private double _speedometerRadius;
 
+        /// <summary>
+        /// Длина стрелки спидометра (фактически - её внешний радиус)
+        /// </summary>
+        private double _handLength;
+
+        /// <summary>
+        /// Внутренний радиус отметок шкалы
+        /// </summary>
+        private double _notchInnerRadius;
+
+        /// <summary>
+        /// Внешний радиус отметок шкалы
+        /// </summary>
+        private double _notchOuterRadius;
+
+        /// <summary>
+        /// Изменение скорости на интервал между двумя чёрточками
+        /// </summary>
+        private double _speedDeltaPerDashInterval;
+
         #endregion
 
         /// <summary>
@@ -151,10 +197,11 @@ namespace Speedometer.Controls
                 _speedometerRadius
             );
 
+            // Рисуем чёрточки
+            DrawAllDashes(context);
+
             // Рисуем стрелку
             DrawHand(context);
-
-
         }
 
         #region Обработчик изменения свойств контрола и размеров окна
@@ -183,6 +230,9 @@ namespace Speedometer.Controls
             _minSide = Math.Min(_width, _height);
 
             _speedometerRadius = SpeedometerRadiusFactor * _minSide / 2.0;
+
+            // Длина стрелки
+            _handLength = HandLengthFactor * _speedometerRadius;
         }
 
         #endregion
@@ -194,6 +244,8 @@ namespace Speedometer.Controls
         /// </summary>
         private void HandleMinSpeedChanged(AvaloniaObject sender, double minSpeed)
         {
+            CalculateSpeedDeltaPerDashInterval();
+
             InvalidateVisual(); // Этот метод заставляет контрол перерисовать себя
         }
 
@@ -210,6 +262,8 @@ namespace Speedometer.Controls
         /// </summary>
         private void HandleMaxSpeedChanged(AvaloniaObject sender, double maxSpeed)
         {
+            CalculateSpeedDeltaPerDashInterval();
+
             InvalidateVisual(); // Этот метод заставляет контрол перерисовать себя
         }
 
@@ -245,14 +299,59 @@ namespace Speedometer.Controls
             context.DrawLine(pen, a, b);
         }
 
-        private void DrawHand(DrawingContext context)
+        /// <summary>
+        /// Вычислить угол чего-нибудь (типа стрелки или чёрточки) в зависимости от скорости
+        /// </summary>
+        /// <param name="speed">Скорость в километрах в час</param>
+        /// <returns>Угол от 0 до 2 Пи</returns>
+        private double GetAngleBySpeed(double speed)
         {
             double a = 2 * Math.PI / (MaxSpeed - MinSpeed);
             double b = -1 * a * MinSpeed;
-            double q = a * CurrentSpeed + b;
-
-            DrawNotch(context, 0, 200, q, HandPen);
+            return a * speed + b;
         }
 
+        /// <summary>
+        /// Метод рисует стрелку спидометра
+        /// </summary>
+        /// <param name="context">На чём рисовать</param>
+        private void DrawHand(DrawingContext context)
+        {
+            double angle = GetAngleBySpeed(CurrentSpeed);
+
+            DrawNotch(context, 0, _handLength, angle, HandPen);
+        }
+
+        /// <summary>
+        /// Метод что рисует одну черточку для указанной скорости
+        /// </summary>
+        /// <param name="context">Где рисовать</param>
+        /// <param name="speed">Для какой скорости рисовать</param>
+        private void DrawDash(DrawingContext context, double speed)
+        {
+            double angle = GetAngleBySpeed(speed);
+
+            _notchInnerRadius = _speedometerRadius * NotchInnerRadiusFactor;
+            _notchOuterRadius = _speedometerRadius * NotchOuterRadiusFactor;
+
+            DrawNotch(context, _notchInnerRadius, _notchOuterRadius, angle, DashPen);
+        }
+
+        /// <summary>
+        /// Рисуем все чёрточки
+        /// </summary>
+        /// <param name="context">На чём рисуем</param>
+        private void DrawAllDashes(DrawingContext context)
+        {
+            for (double speed = MinSpeed; speed <= MaxSpeed; speed += _speedDeltaPerDashInterval)
+            {
+                DrawDash(context, speed);
+            }
+        }
+
+        private void CalculateSpeedDeltaPerDashInterval()
+        {
+            _speedDeltaPerDashInterval = (MaxSpeed - MinSpeed) / (double)(DashCount - 1);
+        }
     }
 }

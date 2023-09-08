@@ -65,7 +65,7 @@ public class MainViewModel : ViewModelBase
 
     public MainViewModel()
     {
-        _carSpeedometer = new CarSpeedometer(0, 100, 300);
+        _carSpeedometer = new CarSpeedometer(0, 50, 300);
 
 
 
@@ -84,12 +84,12 @@ public class MainViewModel : ViewModelBase
     /// </summary>
     private void IncreaseSpeed()
     {
-        if (CurrentSpeed >= MaxSpeed)
-        {
-            return;
-        }
+        CurrentSpeed = CurrentSpeed + 7;
 
-        CurrentSpeed = CurrentSpeed + 10;
+        if (CurrentSpeed > MaxSpeed)
+        {
+            CurrentSpeed = MaxSpeed;
+        }
     }
 
     /// <summary>
@@ -97,11 +97,11 @@ public class MainViewModel : ViewModelBase
     /// </summary>
     private void DecreaseSpeed()
     {
-        if (CurrentSpeed <= MinSpeed)
-        {
-            return;
-        }
+        CurrentSpeed = CurrentSpeed - 7;
 
-        CurrentSpeed = CurrentSpeed - 10;
+        if (CurrentSpeed < MinSpeed)
+        {
+            CurrentSpeed = MinSpeed;
+        }
     }
 }
