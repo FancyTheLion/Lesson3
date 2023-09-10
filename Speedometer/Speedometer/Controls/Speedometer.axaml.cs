@@ -3,6 +3,7 @@ using Avalonia.Controls;
 using Avalonia.Interactivity;
 using Avalonia.Media;
 using System;
+using System.Globalization;
 
 namespace Speedometer.Controls
 {
@@ -45,6 +46,11 @@ namespace Speedometer.Controls
         /// Число чёрточек на спидометре
         /// </summary>
         private const int DashCount = 20;
+
+        /// <summary>
+        /// Множитель для расчета положения текста у черточек
+        /// </summary>
+        private const double NotchTextRadiusFactor = 0.65;
 
         #endregion
 
@@ -144,15 +150,24 @@ namespace Speedometer.Controls
         /// </summary>
         private double _handLength;
 
+        #region Радиусы
+
         /// <summary>
-        /// Внутренний радиус отметок шкалы
+        /// Ближний от центра радиус черточек
         /// </summary>
         private double _notchInnerRadius;
 
         /// <summary>
-        /// Внешний радиус отметок шкалы
+        /// Дальний от центра радиус черточек
         /// </summary>
         private double _notchOuterRadius;
+
+        /// <summary>
+        /// Расстояние от центра спидометра до центра надписей на черточках
+        /// </summary>
+        private double _notchTextRadius;
+
+        #endregion
 
         /// <summary>
         /// Изменение скорости на интервал между двумя чёрточками
@@ -231,8 +246,15 @@ namespace Speedometer.Controls
 
             _speedometerRadius = SpeedometerRadiusFactor * _minSide / 2.0;
 
+
+            _notchInnerRadius = _speedometerRadius * NotchInnerRadiusFactor;
+            _notchOuterRadius = _speedometerRadius * NotchOuterRadiusFactor;
+            _notchTextRadius = _speedometerRadius * NotchTextRadiusFactor;
+
             // Длина стрелки
             _handLength = HandLengthFactor * _speedometerRadius;
+
+
         }
 
         #endregion
@@ -331,10 +353,40 @@ namespace Speedometer.Controls
         {
             double angle = GetAngleBySpeed(speed);
 
-            _notchInnerRadius = _speedometerRadius * NotchInnerRadiusFactor;
-            _notchOuterRadius = _speedometerRadius * NotchOuterRadiusFactor;
 
+            // Рисуем тело чёрточки
             DrawNotch(context, _notchInnerRadius, _notchOuterRadius, angle, DashPen);
+
+            // Рисуем подпись к чёрточке
+            Point textPoint = GetPointCoodinatesByAngleAndRadius(_notchTextRadius, angle);
+
+            FormattedText formattedText = new FormattedText
+                (
+                    $"{speed:0}",
+                    CultureInfo.CurrentCulture,
+                    FlowDirection.LeftToRight,
+                    new Typeface
+                    (
+                        FontFamily.Default,
+                        FontStyle.Italic,
+                        FontWeight.Light,
+                        FontStretch.Condensed
+                     ),
+                    30,
+                    new SolidColorBrush(Colors.Green)
+                );
+
+            Point correctedTextPoin = new Point
+            (
+                textPoint.X - formattedText.Width / 2.0,
+                textPoint.Y - formattedText.Height / 2.0
+            );
+
+            context.DrawText
+            (
+                formattedText,
+                correctedTextPoin
+            );
         }
 
         /// <summary>
